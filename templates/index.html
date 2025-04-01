@@ -1,15 +1,92 @@
-<!--
 <!DOCTYPE html>
 <html>
 <head>
     <title>Pic3.0</title>
     <style>
-        body { background:#6495ED; font-family: Arial; max-width: 800px; margin: auto; padding: 20px; }
-        .upload-form { border: 2px dashed #ccc; padding: 20px; margin: 20px 0; border-radius: 5px; }
-        .image-item { margin: 20px 0; border: 1px solid #ccc; padding: 10px; border-radius: 5px; }
-        .image-preview { max-width: 300px; height: auto; display: block; margin: 10px 0; }
-        .title { font-weight: bold; font-size: 18px; }
-        .desc { font-size: 14px; color: #555; }
+        body { 
+            max-width: 1200px; 
+            margin: 0 auto; 
+            padding: 20px; 
+            font-family: Arial; 
+            background: rgb(212, 224, 212);
+        }
+        .upload-form { 
+            border: 2px dashed #ccc; 
+            padding: 20px; 
+            margin-bottom: 30px; 
+            text-align: center; 
+        }
+        .gallery { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); 
+            gap: 20px; 
+        }
+        .card { 
+            border: 1px solid #ccc; 
+            border-radius: 8px; 
+            overflow: hidden; 
+            cursor: pointer; 
+            background: #fff;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .card:hover {
+            transform: scale(1.05);
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .card img { 
+            width: 100%; 
+            height: 200px; 
+            object-fit: cover;  /* Ensures image fills the container */
+        }
+        .title { 
+            font-weight: bold; 
+            font-size: 16px; 
+            margin: 5px 10px;
+        }
+        .desc { 
+            font-size: 14px; 
+            color: #555; 
+            margin: 0 10px 10px;
+        }
+        /* Modal Styles */
+        .modal { 
+            display: none; 
+            position: fixed; 
+            top: 0; left: 0; 
+            width: 100%; 
+            height: 100%; 
+            background: rgba(0, 0, 0, 0.6); 
+        }
+        .modal-content { 
+            background: white; 
+            padding: 20px; 
+            max-width: 500px; 
+            margin: 100px auto; 
+            border-radius: 8px; 
+            text-align: center; 
+        }
+        .modal-content img { 
+            width: 100%; 
+            max-height: 300px; 
+            object-fit: contain; 
+            margin-bottom: 10px;
+        }
+        .download-btn { 
+            background: blue; 
+            color: white; 
+            padding: 5px 10px; 
+            text-decoration: none; 
+            display: inline-block; 
+            margin: 10px 5px 10px 0;
+        }
+        .close-btn { 
+            background: red; 
+            color: white; 
+            padding: 5px 10px; 
+            border: none; 
+            cursor: pointer; 
+            margin-top: 10px; 
+        }
     </style>
 </head>
 <body>
@@ -22,23 +99,45 @@
             <button type="submit">Upload</button>
         </form>
     </div>
-
-    <div>
-        <h2>Uploaded Images</h2>
+    
+    <div class="gallery">
         {% for file in files %}
-        <div class="image-item">
-            <a href="/files/{{ file.name }}" download="{{ file.name }}">
-                <img src="/files/{{ file.name }}" class="image-preview" alt="{{ file.name }}">
-            </a>
+        <div class="card" onclick="openModal('{{ file.name }}', '{{ file.title }}', '{{ file.description }}')">
+            <img src="/files/{{ file.name }}" alt="{{ file.name }}">
             <div class="title">{{ file.title }}</div>
             <div class="desc">{{ file.description }}</div>
         </div>
-        
         {% endfor %}
     </div>
+    
+    <!-- Modal Structure -->
+    <div id="imageModal" class="modal">
+        <div class="modal-content">
+            <h3 id="modalTitle"></h3>
+            <img id="modalImage" src="" alt="">
+            <p id="modalDescription"></p>
+            <a id="downloadButton" class="download-btn" href="" download>Download</a>
+            <button class="close-btn" onclick="closeModal()">Close</button>
+        </div>
+    </div>
+    
+    <script>
+        function openModal(imageName, title, description) {
+            document.getElementById("modalTitle").textContent = title;
+            document.getElementById("modalImage").src = "/files/" + imageName;
+            document.getElementById("modalDescription").textContent = description;
+            document.getElementById("downloadButton").href = "/files/" + imageName;
+            document.getElementById("imageModal").style.display = "block";
+        }
+    
+        function closeModal() {
+            document.getElementById("imageModal").style.display = "none";
+        }
+    </script>
 </body>
 </html>
--->
+
+<!--
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -131,7 +230,7 @@
 <body>
     <h1>Pic3.0</h1>
     
-    <!-- Upload Form -->
+    <!-- Upload Form 
     <div class="upload-form">
         <form method="post" enctype="multipart/form-data" action="/upload">
             <label>Choose JPEG image to upload</label><br>
@@ -140,7 +239,7 @@
         </form>
     </div>
 
-    <!-- Uploaded Images -->
+    <!-- Uploaded Images 
     <div>
         <h2>Uploaded Images</h2>
         <div class="images-container">
@@ -158,3 +257,4 @@
     </div>
 </body>
 </html>
+-->
